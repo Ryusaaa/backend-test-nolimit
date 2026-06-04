@@ -1,0 +1,13 @@
+/*
+  Warnings:
+
+  - You are about to drop the column `published` on the `post` table. All the data in the column will be lost.
+  - You are about to drop the column `title` on the `post` table. All the data in the column will be lost.
+  - Added the required column `updatedAt` to the `Post` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE `post` DROP COLUMN `published`,
+    DROP COLUMN `title`,
+    ADD COLUMN `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    ADD COLUMN `updatedAt` DATETIME(3) NOT NULL;
