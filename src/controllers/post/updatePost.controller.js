@@ -1,4 +1,4 @@
-const prisma = require('../prismaClient');
+const prisma = require("../../config/prisma");
 
 exports.updatePost = async (req, res) => {
 

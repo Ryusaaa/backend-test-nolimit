@@ -1,15 +1,12 @@
-const prisma =
-  require("../config/prisma");
-
+const prisma = require("../../config/prisma");
 const bcrypt =
   require("bcryptjs");
 
 const {
   generateToken
-} = require("../utils/jwt");
+} = require("../../utils/jwt");
 
-
-exports.login = async (
+exports.register = async (
   req,
   res
 ) => {
@@ -17,46 +14,43 @@ exports.login = async (
   try {
 
     const {
+      name,
       email,
       password
     } = req.body;
 
-    const user =
+    const userExists =
       await prisma.user.findUnique({
         where: {
           email
         }
       });
 
-    if (!user) {
+    if (userExists) {
 
       return res.status(400).json({
-        message:
-          "Invalid credentials"
+        message: "Email already exists"
       });
 
     }
 
-    const match =
-      await bcrypt.compare(
-        password,
-        user.password
-      );
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
 
-    if (!match) {
-
-      return res.status(400).json({
-        message:
-          "Invalid credentials"
+    const user =
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          password:
+            hashedPassword
+        }
       });
 
-    }
-
-    const token =
-      generateToken(user);
-
-    res.json({
-      token
+    res.status(201).json({
+      message:
+        "User registered successfully",
+      data: user
     });
 
   } catch (error) {

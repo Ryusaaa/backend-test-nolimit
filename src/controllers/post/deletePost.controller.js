@@ -1,4 +1,4 @@
-const prisma = require('../prismaClient');
+const prisma = require("../../config/prisma");
 
 exports.deletePost = async (req, res) => {
 
